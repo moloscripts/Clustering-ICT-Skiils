@@ -1,0 +1,33 @@
+---
+title: "Clustering: ICT Skills"
+author: "Molo Muli"
+date: '2022-07-07'
+output: 
+  tufte::tufte_html: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Context
+The data set was collected using [Multiple Indicator Cluster Survey (MICS)](https://mics.unicef.org/), and it's hosted in [UNICEF's Open Data Portal Data website](https://data.unicef.org/resources/dataset/education-data/). 
+
+The data set contains percentage values as a measure of skill set penetration of various ICT skills across men and women aged 15-24 years in the last 3 months (April 2022-June2022), across ---- countries globally. 
+
+
+
+# Goals/Objectives
+Discover similar or dissimilar ICT Skills across men and women 
+
+
+# Clustering
+K-Modes 
+Gowers Distance
+K-prototypes
+Jaccard Distance
+
+
+
+
+

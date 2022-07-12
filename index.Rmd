@@ -1,5 +1,5 @@
 ---
-title: "Clustering: ICT Skills"
+title: "Cluster analysis in segmenting ICT Skills among youths and adults"
 author: "Molo Muli"
 date: '2022-07-07'
 output: 
@@ -10,24 +10,58 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r R-Script file, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+source("Scripts/ICT.Skills.Cluster.R", local = knitr::knit_global())
+```
+
+
 # Context
-The data set was collected using [Multiple Indicator Cluster Survey (MICS)](https://mics.unicef.org/), and it's hosted in [UNICEF's Open Data Portal Data website](https://data.unicef.org/resources/dataset/education-data/). 
 
-The data set contains percentage values as a measure of skill set penetration of various ICT skills across men and women aged 15-24 years in the last 3 months (April 2022-June2022), across ---- countries globally. 
+The data context falls under United Nations SDG 4 which is to ensure inclusive and equitable education and promote lifelong learning opportunities for all. Observations in the data entails percentage values of youths/adults who used 9 selected ICT skills. An individual is considered to have ICT skills if s/he used at least one of the 9 ICT skills in the past 3 months. The data set was collected using [Multiple Indicator Cluster Survey (MICS)](https://mics.unicef.org/) and it's hosted in [UNICEF's open data portal website](https://data.unicef.org/resources/dataset/education-data/).
 
+*Disclaimer: All reasonable precautions have been taken to verify the information in this database. In no event shall UNICEF be liable for damages arising from its use or interpretation*
 
+# Aim
+
+To evaluate methods of clustering using a data set that contains both numerical and categorical observations
 
 # Goals/Objectives
-Discover similar or dissimilar ICT Skills across men and women 
 
+-   Discover similar or dissimilar ICT cluster skills across men and women in the various countries present in the data
+-   R-implementation of different clustering techniques using a data set with mixed data types. A data set with mixed data types is a set of data containing both continuous and discrete observations.
+
+# Data
+The data set contains 15 columns and 285 observations. 73% is numerical and 27% discrete. Sampled countries are 35 across 8 UNICEF Regions. Below are the columns present in the data 
+
+# Descriptive Analytics
+
+
+From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
+
+
+```{r Descriptive Statistics, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="Figure: Here is a really important caption."}
+FormattableND
+```
+
+
+# Cluster analysis
+Clustering is an unsupervised machine learning algorithm that finds clusters such that observations present in a cluster are similar to each other while clusters formed from these observations are dissimilar from each other.
+
+
+
+
+
+Below is the
 
 # Clustering
-K-Modes 
-Gowers Distance
-K-prototypes
-Jaccard Distance
 
+K-Modes Gowers Distance K-prototypes Jaccard Distance
 
+# 
 
+K-modes, unlike K-means uses dissimilarities, i.e quantification of total mismatches between two objects, the smaller the number the
 
+# References
 
+-   <https://link.springer.com/article/10.1023/A:1009769707641>
+-   <https://amva4newphysics.wordpress.com/2016/10/26/into-the-world-of-clustering-algorithms-k-means-k-modes-and-k-prototypes/comment-page-1/>

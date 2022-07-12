@@ -14,7 +14,7 @@
 
 <meta name="date" content="2022-07-07" />
 
-<title>Clustering: ICT Skills</title>
+<title>Cluster analysis in segmenting ICT Skills among youths and adults</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -283,6 +283,7 @@ if (window.hljs) {
 
 
 
+
 </head>
 
 <body>
@@ -290,7 +291,8 @@ if (window.hljs) {
 
 
 
-<h1 class="title toc-ignore">Clustering: ICT Skills</h1>
+<h1 class="title toc-ignore">Cluster analysis in segmenting ICT Skills
+among youths and adults</h1>
 <h4 class="author">Molo Muli</h4>
 <h4 class="date">2022-07-07</h4>
 
@@ -298,21 +300,370 @@ if (window.hljs) {
 
 <div id="context" class="section level1">
 <h1>Context</h1>
-<p>The data set was collected using <a href="https://mics.unicef.org/">Multiple Indicator Cluster Survey
-(MICS)</a>, and it’s hosted in <a href="https://data.unicef.org/resources/dataset/education-data/">UNICEF’s
-Open Data Portal Data website</a>.</p>
-<p>The data set contains percentage values as a measure of skill set
-penetration of various ICT skills across men and women aged 15-24 years
-in the last 3 months (April 2022-June2022), across —- countries
-globally.</p>
+<p>The data context falls under United Nations SDG 4 which is to ensure
+inclusive and equitable education and promote lifelong learning
+opportunities for all. Observations in the data entails percentage
+values of youths/adults who used 9 selected ICT skills. An individual is
+considered to have ICT skills if s/he used at least one of the 9 ICT
+skills in the past 3 months. The data set was collected using <a href="https://mics.unicef.org/">Multiple Indicator Cluster Survey
+(MICS)</a> and it’s hosted in <a href="https://data.unicef.org/resources/dataset/education-data/">UNICEF’s
+open data portal website</a>.</p>
+<p><em>Disclaimer: All reasonable precautions have been taken to verify
+the information in this database. In no event shall UNICEF be liable for
+damages arising from its use or interpretation</em></p>
+</div>
+<div id="aim" class="section level1">
+<h1>Aim</h1>
+<p>To evaluate methods of clustering using a data set that contains both
+numerical and categorical observations</p>
 </div>
 <div id="goalsobjectives" class="section level1">
 <h1>Goals/Objectives</h1>
-<p>Discover similar or dissimilar ICT Skills across men and women</p>
+<ul>
+<li>Discover similar or dissimilar ICT cluster skills across men and
+women in the various countries present in the data</li>
+<li>R-implementation of different clustering techniques using a data set
+with mixed data types. A data set with mixed data types is a set of data
+containing both continuous and discrete observations.</li>
+</ul>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>The data set contains 15 columns and 285 observations. 73% is
+numerical and 27% discrete. Sampled countries are 35 across 8 UNICEF
+Regions. Below are the columns present in the data</p>
+</div>
+<div id="descriptive-analytics" class="section level1">
+<h1>Descriptive Analytics</h1>
+<p>From the data table above, the ICT skill with the highest variation
+is how to write a computer program using any programming language.
+Personally this is a very specific skill set as compared to other
+general ICT skills.</p>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+variables
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+median
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+max
+</th>
+<th style="text-align:right;">
+zero
+</th>
+<th style="text-align:right;">
+outlier
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Wrote a computer program
+in any programming language </span>
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.033
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.042
+</td>
+<td style="text-align:right;">
+0.236
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 100.00%">27</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Sent e-mail with
+attached file, such as a document, picture or video </span>
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+<td style="text-align:right;">
+0.132
+</td>
+<td style="text-align:right;">
+0.057
+</td>
+<td style="text-align:right;">
+0.194
+</td>
+<td style="text-align:right;">
+0.963
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 70.37%">19</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Connected and installed
+a new device e.g Modem </span>
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.088
+</td>
+<td style="text-align:right;">
+0.036
+</td>
+<td style="text-align:right;">
+0.123
+</td>
+<td style="text-align:right;">
+0.862
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 66.67%">18</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Found, downloaded,
+installed and configured software </span>
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.106
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:right;">
+0.164
+</td>
+<td style="text-align:right;">
+0.914
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 59.26%">16</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Created an electronic
+presentation with presentation software </span>
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.088
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+<td style="text-align:right;">
+0.136
+</td>
+<td style="text-align:right;">
+0.594
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 51.85%">14</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Used a basic arithmetic
+formula in a spreadsheet </span>
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.098
+</td>
+<td style="text-align:right;">
+0.041
+</td>
+<td style="text-align:right;">
+0.153
+</td>
+<td style="text-align:right;">
+0.721
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 40.74%">11</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Transferred a file
+between a computer and other device </span>
+</td>
+<td style="text-align:right;">
+0.012
+</td>
+<td style="text-align:right;">
+0.143
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+<td style="text-align:right;">
+0.232
+</td>
+<td style="text-align:right;">
+0.873
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 29.63%">8</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Copied or moved a file
+or folder </span>
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.174
+</td>
+<td style="text-align:right;">
+0.095
+</td>
+<td style="text-align:right;">
+0.290
+</td>
+<td style="text-align:right;">
+0.885
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 18.52%">5</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Used a copy and paste
+tool to duplicate or move information within a document</span>
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.173
+</td>
+<td style="text-align:right;">
+0.092
+</td>
+<td style="text-align:right;">
+0.297
+</td>
+<td style="text-align:right;">
+0.840
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 14.81%">4</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color: #47B5FF; font-weight: bold">Wealth quantile </span>
+</td>
+<td style="text-align:right;">
+2.000
+</td>
+<td style="text-align:right;">
+3.000
+</td>
+<td style="text-align:right;">
+3.000
+</td>
+<td style="text-align:right;">
+4.000
+</td>
+<td style="text-align:right;">
+5.000
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; unicode-bidi: plaintext; border-radius: 4px; padding-right: 2px; background-color: #F5DF99; width: 0.00%">0</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cluster-analysis" class="section level1">
+<h1>Cluster analysis</h1>
+<p>Clustering is an unsupervised machine learning algorithm that finds
+clusters such that observations present in a cluster are similar to each
+other while clusters formed from these observations are dissimilar from
+each other.</p>
+<p>Below is the</p>
 </div>
 <div id="clustering" class="section level1">
 <h1>Clustering</h1>
 <p>K-Modes Gowers Distance K-prototypes Jaccard Distance</p>
+</div>
+<div id="section" class="section level1">
+<h1></h1>
+<p>K-modes, unlike K-means uses dissimilarities, i.e quantification of
+total mismatches between two objects, the smaller the number the</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li><a href="https://link.springer.com/article/10.1023/A:1009769707641" class="uri">https://link.springer.com/article/10.1023/A:1009769707641</a></li>
+<li><a href="https://amva4newphysics.wordpress.com/2016/10/26/into-the-world-of-clustering-algorithms-k-means-k-modes-and-k-prototypes/comment-page-1/" class="uri">https://amva4newphysics.wordpress.com/2016/10/26/into-the-world-of-clustering-algorithms-k-means-k-modes-and-k-prototypes/comment-page-1/</a></li>
+</ul>
 </div>
 
 

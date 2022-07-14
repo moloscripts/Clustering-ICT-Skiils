@@ -5,13 +5,14 @@
 # Libraries and Data set ####
 
 ## Libraries ####
+library(devtools)
 library(easypackages)
-libraries("inspectdf", "tidyverse","dlookr","tufte","formattable")
+libraries("inspectdf", "tidyverse","dlookr","tufte","formattable","clustMixType","klaR","clusteval")
 
 ## Dataset ####
 ICTSkills <- read.csv("Data/ICTSkills.csv")
 ICTSkills <- ICTSkills %>%
-  select(-c(ISO3, Source, Performed.at.least.one.out.of.nine.activities))
+  dplyr::select(-c(ISO3, Source, Performed.at.least.one.out.of.nine.activities))
 
 # Rename 
 ICTSkills <- ICTSkills %>%
@@ -28,25 +29,48 @@ ICTSkills <- ICTSkills %>%
          `UNICEF region` = UNICEF.Region, 
          `Wealth quantile` = Wealth.Quantile)
 
+ICTSkills$`Wealth quantile` <- as.character(ICTSkills$`Wealth quantile`)
 NumericDescriptives <- diagnose_numeric(ICTSkills)
 NumericDescriptives <- NumericDescriptives %>%
   select(-c(min, minus)) %>%
   arrange(desc(outlier))
 
+# Descritpive Analytics ####
 ND <- NumericDescriptives %>%
-  mutate_if(is.numeric, round, digits=3) 
-# %>%
-# formattable(ND,
-#             list(variables = formatter("span", style = ~ style(color="#513252", font.weight="bold")),
-#                  mean=percent, 
-#                  outlier=color_bar("#EB4747")))
+  mutate_if(is.numeric, round, digits=3)
 
 FormattableND <- formattable(ND, 
             # align = c("l",rep("r", NCOL(prevalence) - 1)),
             list(variables = formatter("span", style = ~ style(color = "#47B5FF", font.weight = "bold")), 
                  outlier = color_bar("#F5DF99"))
             )
-FormattableND
+# FormattableND
 
+NumericalDistribution <- ICTSkills %>%
+  gather(variable, value, -c(1:4,14)) %>%
+  ggplot(aes(x=value)) +
+  geom_histogram(fill="lightblue2", color='black') + 
+  facet_wrap(~variable, scales='free_x') + 
+  labs(title = 'Distribution of numeric variables',x='values', y='Frequency') + 
+  theme_minimal()
 
+# Clustering ####
+# Convert chars to factors ####
+ICTSkills <- ICTSkills %>%
+  mutate_if(is.character, as.factor)
 
+# seed
+set.seed(123)
+k.max <- 5
+wss <- sapply(1:k.max, 
+              function(k){kproto(ICTSkills, k)$tot.withinss})
+wss
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+
+# clustering k-modes 
+set.seed(367)
+ict_clusters <- kproto(ICTSkills, k=3, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
+ict_clusters

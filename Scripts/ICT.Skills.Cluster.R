@@ -7,7 +7,7 @@
 ## Libraries ####
 library(devtools)
 library(easypackages)
-libraries("inspectdf", "tidyverse","dlookr","tufte","formattable","clustMixType","klaR","clusteval")
+libraries("inspectdf", "tidyverse","dlookr","tufte","formattable","clustMixType","clusteval")
 
 ## Dataset ####
 ICTSkills <- read.csv("Data/ICTSkills.csv")
@@ -70,7 +70,16 @@ plot(1:k.max, wss,
      xlab="Number of clusters K",
      ylab="Total within-clusters sum of squares")
 
-# clustering k-modes 
-set.seed(367)
+# clustering k-prototypes 
+set.seed(3676)
 ict_clusters <- kproto(ICTSkills, k=3, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
 ict_clusters
+
+# Visualise the clusters
+clprofiles(ict_clusters, ICTSkills)
+
+
+
+
+
+

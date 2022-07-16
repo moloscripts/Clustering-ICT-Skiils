@@ -78,7 +78,7 @@ ict_clusters
 # Visualise the clusters
 clprofiles(ict_clusters, ICTSkills)
 
-
+# 
 
 
 

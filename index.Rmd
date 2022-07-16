@@ -1,9 +1,10 @@
 ---
-title: "Cluster analysis in segmenting ICT Skills among youths and adults"
+title: "Cluster analysis of mixed data types: Case study of segmenting ICT Skills among youths and adults"
 author: "Molo Muli"
-date: '2022-07-07'
+date: "`r Sys.Date()`"
 output: 
   tufte::tufte_html: default
+  code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -21,47 +22,80 @@ The data context falls under United Nations SDG 4 which is to ensure inclusive a
 
 *Disclaimer: All reasonable precautions have been taken to verify the information in this database. In no event shall UNICEF be liable for damages arising from its use or interpretation*
 
-# Aim
-
-To evaluate methods of clustering using a data set that contains both numerical and categorical observations
-
 # Goals/Objectives
 
--   Discover similar or dissimilar ICT cluster skills across men and women in the various countries present in the data
--   R-implementation of different clustering techniques using a data set with mixed data types. A data set with mixed data types is a set of data containing both continuous and discrete observations.
+-   Cluster similar or dissimilar ICT skills across men and women in the various countries present in the data
+-   Successfully use R to implement clustering on a data set with mixed data types. A data set with mixed data types is a set of data containing both continuous and discrete observations.
 
 # Data
-The data set contains 15 columns and 285 observations. 73% is numerical and 27% discrete. Sampled countries are 35 across 8 UNICEF Regions. Below are the columns present in the data 
+The data set contains 15 columns and 285 observations. 73% is numerical and 27% discrete. Sampled countries are 35 across 8 UNICEF Regions.
 
 # Descriptive Analytics
 
-
-From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
-
-
-```{r Descriptive Statistics, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="Figure: Here is a really important caption."}
-FormattableND
+```{r ND, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.margin=T}
+NumericalDistribution
 ```
 
 
+From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
+From the histograms, all numeric variables have a right-tailed distribution. A probable reason is because the uptake of these courses was high initially, but over the period of three months, it slowed down. This is called the startup effect[^1].
+
+```{r Descriptive Statistics, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+FormattableND
+```
+
+<!-- # Exploratory Data Analysis (EDA) -->
+<!-- ## Correlation Analysis -->
+<!-- Correlation analysis is used to quantify the association of two continuous variables. Output of correlation analysis is a correlation coefficient which is a value that ranges from -1 to 1. This coefficient denotes the strength of the association of the variables. Variables which have a coefficient leaning towards -1 have a negative correlation whereas variables that lean towards a coefficient value of 1 have a positive correlation. The higher the coefficient on either sides, the stronger the correlation between the variables. A correlation coefficient of 0 means that the variables are independent of each other. -->
+
+<!-- ## R-Implementation of correlation -->
+<!-- Since correlation works with numeric values, subset the data frame to remain with only continuous values -->
+
 # Cluster analysis
-Clustering is an unsupervised machine learning algorithm that finds clusters such that observations present in a cluster are similar to each other while clusters formed from these observations are dissimilar from each other.
+Clustering is an unsupervised machine learning algorithm that finds clusters such that observations present in a cluster are similar to each other while clusters formed from these observations are dissimilar from each other. Clustering is mostly used for data mining and/or further analysis for future inferences.
 
+Clustering algorithms are data-type specific. In this case the data has both numerical and categorical observations hence the appropriate algorithm for use is K-prototypes. K-prototypes is an extension of both K-means and K-modes algorithm. 
 
+K-prototypes belongs to  the family of partitional cluster algorithms. It measures distance between numerical features using Euclidean distance (like K-means) and distance between categorical features using the number of matching categories (like K-modes). It was first published by Huang in 1998[^2]. 
 
+Prior to clustering, one needs to derive optimal number of clusters. Since there's no reproducible research on this using K-prototypes, the code below iterates 
+probable number of clusters by plotting a scree plot using the elbow method[^3]. 
 
+```{r elbow plot, echo=FALSE, fig.cap="fig 2.0 Scree plot showing the optimum number of clusters", fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+```
+From figure 2.0, I'll cluster my data using 3 partitions.
 
-Below is the
+```{r k-prototype implementation, eval=FALSE, include=FALSE}
+ict_clusters <- kproto(ICTSkills, k=4, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
+ict_clusters
+```
 
-# Clustering
+## Visualisation of the clusters
 
-K-Modes Gowers Distance K-prototypes Jaccard Distance
+```{r cluster vis, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+clprofiles(ict_clusters, ICTSkills)
+```
 
-# 
+## Knowledge discovery
+Clusters derived include: 
 
-K-modes, unlike K-means uses dissimilarities, i.e quantification of total mismatches between two objects, the smaller the number the
+* Gender is constant across the clusters and its independent of the ICT skill. 
+* UNICEF regions; Eastern and Southern Africa (ESA),  South Asia (SA) and West and Central Africa (WCA) that have fall under wealth quantile of 1 have the highest count of youths and adults with ICT skills.
+* UNICEF regions; East Asia and the Pacific (EAP) had more males who had knowledge in ICT skills and fall under wealth quantile 2, 3 and 4.
+
+## Perfomance comparison
+
+A performance measure is needed to be performed in the underlying clusters because the previous output has clustered only categorical variables using K-modes and numeric variables using k-means. This comparison called Rand Index (Rand measure). 
+Rand index is a way of comparing similarity of results between two clustering methods. In this case we want to compare the similarity of results from K-means and K-modes. 
+
 
 # References
 
--   <https://link.springer.com/article/10.1023/A:1009769707641>
--   <https://amva4newphysics.wordpress.com/2016/10/26/into-the-world-of-clustering-algorithms-k-means-k-modes-and-k-prototypes/comment-page-1/>
+[^1]: https://www.itl.nist.gov/div898/handbook/eda/section3/histogr6.htm
+[^2]: https://link.springer.com/article/10.1023/A:1009769707641
+[^3]: https://stats.stackexchange.com/questions/293877/optimal-number-of-clusters-using-k-prototypes-method-in-r
+

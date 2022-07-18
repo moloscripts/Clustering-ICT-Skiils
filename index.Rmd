@@ -36,13 +36,14 @@ The data set contains 15 columns and 285 observations. 73% is numerical and 27% 
 NumericalDistribution
 ```
 
-
 From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
-From the histograms, all numeric variables have a right-tailed distribution. A probable reason is because the uptake of these courses was high initially, but over the period of three months, it slowed down. This is called the startup effect[^1].
 
 ```{r Descriptive Statistics, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-FormattableND
+# FormattableND
 ```
+
+From the histograms, all numeric variables have a right-tailed distribution. A probable reason is because the uptake of these courses was high initially, but over the period of three months, it slowed down. This is called the startup effect[^1].
+
 
 <!-- # Exploratory Data Analysis (EDA) -->
 <!-- ## Correlation Analysis -->
@@ -69,9 +70,10 @@ plot(1:k.max, wss,
 ```
 From figure 2.0, I'll cluster my data using 3 partitions.
 
+`ict_clusters <- kproto(ICTSkills, k=3, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)`
+
 ```{r k-prototype implementation, eval=FALSE, include=FALSE}
 ict_clusters <- kproto(ICTSkills, k=4, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
-ict_clusters
 ```
 
 ## Visualisation of the clusters
@@ -80,6 +82,7 @@ ict_clusters
 clprofiles(ict_clusters, ICTSkills)
 ```
 
+
 ## Knowledge discovery
 Clusters derived include: 
 
@@ -87,15 +90,34 @@ Clusters derived include:
 * UNICEF regions; Eastern and Southern Africa (ESA),  South Asia (SA) and West and Central Africa (WCA) that have fall under wealth quantile of 1 have the highest count of youths and adults with ICT skills.
 * UNICEF regions; East Asia and the Pacific (EAP) had more males who had knowledge in ICT skills and fall under wealth quantile 2, 3 and 4.
 
+## Extension to the algorithm
+Further to the algorithm, one has to perform a `lambdaest` to investigate the variables'  variance/concentration in order to acutely specify lambda for k-prototypes clustering.
+The function is 
+
+`lambdaest(x, num.method = 1, fac.method = 1, outtype = "numeric")` 
+
+where x is the original data frame. 
+From the code, the Estimated λ is 0.0295. A small λ will emphasize that the data frame has more numeric variables and it will have a similar results as if k-means was deployed to the data
+Whereas λ means that there's a heavy influence of categorical variables in the data. In this case λ inclines more on numeric variables[^4].
+
+
 ## Perfomance comparison
 
 A performance measure is needed to be performed in the underlying clusters because the previous output has clustered only categorical variables using K-modes and numeric variables using k-means. This comparison called Rand Index (Rand measure). 
-Rand index is a way of comparing similarity of results between two clustering methods. In this case we want to compare the similarity of results from K-means and K-modes. 
+Rand index is a way of comparing similarity of results between two clustering methods. In this case we want to compare the similarity of results of K-means and K-modes. 
 
+A rand measure from the two clusters is 0.515913. 
 
-# References
+An index of 0 indicates that the two clustering methods do not agree on the clustering of any pair of elements whereas an index of 1 
+indicates that the two clustering methods perfectly agree on the clustering of every pair of elements. 
+
+Our  index is an indication of 'partial agreement of the clusters.
 
 [^1]: https://www.itl.nist.gov/div898/handbook/eda/section3/histogr6.htm
 [^2]: https://link.springer.com/article/10.1023/A:1009769707641
 [^3]: https://stats.stackexchange.com/questions/293877/optimal-number-of-clusters-using-k-prototypes-method-in-r
+[^4]: https://journal.r-project.org/archive/2018/RJ-2018-048/RJ-2018-048.pdf
 
+# Full Code
+
+* https://github.com/moloscripts/Clustering-ICT-Skills/

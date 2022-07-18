@@ -7,7 +7,9 @@
 ## Libraries ####
 library(devtools)
 library(easypackages)
+library(klaR)
 libraries("inspectdf", "tidyverse","dlookr","tufte","formattable","clustMixType","clusteval")
+
 
 ## Dataset ####
 ICTSkills <- read.csv("Data/ICTSkills.csv")
@@ -30,6 +32,11 @@ ICTSkills <- ICTSkills %>%
          `Wealth quantile` = Wealth.Quantile)
 
 ICTSkills$`Wealth quantile` <- as.character(ICTSkills$`Wealth quantile`)
+
+# Convert characters to factors
+ICTSkills <- as.data.frame(unclass(ICTSkills),stringsAsFactors=TRUE)
+
+# Numeric Descriptives of the data
 NumericDescriptives <- diagnose_numeric(ICTSkills)
 NumericDescriptives <- NumericDescriptives %>%
   select(-c(min, minus)) %>%
@@ -77,6 +84,19 @@ ict_clusters
 
 # Visualise the clusters
 clprofiles(ict_clusters, ICTSkills)
+
+
+# lambdaest 
+# Investigate the variables  variances/concentration to support lambda specification of lambda for k-prototypes clustering.
+lambdaest(ICTSkills, num.method = 1, fac.method = 1, outtype = "numeric")
+
+
+# Rand index for cluster similarity ####
+
+# Perform K-means and k-modes on the data
+kmores <- kmodes(ICTSkills[,1:4, 14], 3)
+kmres <- kmeans(ICTSkills[,5:13], 3)
+cluster_similarity(kmores$cluster, kmres$cluster, similarity = "rand")
 
 # 
 

@@ -33,7 +33,7 @@ The data set contains 15 columns and 285 observations. 73% is numerical and 27% 
 # Descriptive Analytics
 From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
 
-```{r Descriptive Statistics, message=FALSE, warning=FALSE, paged.print=FALSE, fig.margin=T}
+```{r Descriptive Statistics, message=FALSE, warning=FALSE, paged.print=FALSE, fig.margin=T, fig.cap="fig 1.0. Table of descriptive statistics"}
 
 # DF of numerical variables using diagnose_numeric()
 NumericDescriptives <- diagnose_numeric(ICTSkills)
@@ -47,7 +47,7 @@ knitr::include_graphics("Outputs/DescriptiveStats.png")
 
 From the histograms, all numeric variables have a right-tailed distribution. A probable reason is because the uptake of these courses was high initially, but over the period of three months, it slowed down. This is called the startup effect[^1].
 
-```{r ND, echo=TRUE, fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r ND, echo=TRUE, fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="fig 2.0. Histogram of all numeric variables"}
 
 # Histogram of all numerical variables
 NumericalDistribution <- ICTSkills %>%
@@ -80,13 +80,13 @@ K-prototypes belongs to  the family of partitional cluster algorithms. It measur
 Prior to clustering, one needs to derive optimal number of clusters. Since there's no reproducible research on this using K-prototypes, the code below iterates 
 probable number of clusters by plotting a scree plot using the elbow method[^3]. 
 
-```{r elbow plot, echo=TRUE, fig.cap="fig 2.0 Scree plot showing the optimum number of clusters", fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r elbow plot, echo=TRUE, fig.cap="fig 3.0 Scree plot showing the optimum number of clusters", fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
 plot(1:k.max, wss,
      type="b", pch = 19, frame = FALSE, 
      xlab="Number of clusters K",
      ylab="Total within-clusters sum of squares")
 ```
-From figure 2.0, I'll cluster my data using 3 partitions.
+From figure 3.0, I'll cluster my data using 3 partitions.
 
 ```{r k-prototype implementation, echo=TRUE, results='hide'}
 # The cluster model

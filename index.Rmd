@@ -31,18 +31,36 @@ The data context falls under United Nations SDG 4 which is to ensure inclusive a
 The data set contains 15 columns and 285 observations. 73% is numerical and 27% discrete. Sampled countries are 35 across 8 UNICEF Regions.
 
 # Descriptive Analytics
-
-```{r ND, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.margin=T}
-NumericalDistribution
-```
-
 From the data table above, the ICT skill with the highest variation is how to write a computer program using any programming language. Personally this is a very specific skill set as compared to other general ICT skills.
 
-```{r Descriptive Statistics, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
-# FormattableND
+```{r Descriptive Statistics, message=FALSE, warning=FALSE, paged.print=FALSE, fig.margin=T}
+
+# DF of numerical variables using diagnose_numeric()
+NumericDescriptives <- diagnose_numeric(ICTSkills)
+NumericDescriptives <- NumericDescriptives %>%
+  select(-c(min, minus)) %>%
+  arrange(desc(outlier))
+
+# Load the output
+knitr::include_graphics("Outputs/DescriptiveStats.png")
 ```
 
 From the histograms, all numeric variables have a right-tailed distribution. A probable reason is because the uptake of these courses was high initially, but over the period of three months, it slowed down. This is called the startup effect[^1].
+
+```{r ND, echo=TRUE, fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+# Histogram of all numerical variables
+NumericalDistribution <- ICTSkills %>%
+  gather(variable, value, -c(1:4,14)) %>%
+  ggplot(aes(x=value)) +
+  geom_histogram(fill="lightblue2", color='black') + 
+  facet_wrap(~variable, scales='free_x') + 
+  labs(title = 'Distribution of numeric variables',x='values', y='Frequency') + 
+  theme_minimal()
+
+NumericalDistribution
+```
+
 
 
 <!-- # Exploratory Data Analysis (EDA) -->
@@ -62,7 +80,7 @@ K-prototypes belongs to  the family of partitional cluster algorithms. It measur
 Prior to clustering, one needs to derive optimal number of clusters. Since there's no reproducible research on this using K-prototypes, the code below iterates 
 probable number of clusters by plotting a scree plot using the elbow method[^3]. 
 
-```{r elbow plot, echo=FALSE, fig.cap="fig 2.0 Scree plot showing the optimum number of clusters", fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r elbow plot, echo=TRUE, fig.cap="fig 2.0 Scree plot showing the optimum number of clusters", fig.margin=T, message=FALSE, warning=FALSE, paged.print=FALSE}
 plot(1:k.max, wss,
      type="b", pch = 19, frame = FALSE, 
      xlab="Number of clusters K",
@@ -70,21 +88,22 @@ plot(1:k.max, wss,
 ```
 From figure 2.0, I'll cluster my data using 3 partitions.
 
-`ict_clusters <- kproto(ICTSkills, k=3, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)`
-
-```{r k-prototype implementation, eval=FALSE, include=FALSE}
-ict_clusters <- kproto(ICTSkills, k=4, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
+```{r k-prototype implementation, echo=TRUE, results='hide'}
+# The cluster model
+ict_clusters <- kproto(ICTSkills, k=3, lambda = NULL, iter.max = 100, nstart = 1, na.rm = TRUE, verbose = T)
 ```
 
 ## Visualisation of the clusters
 
 ```{r cluster vis, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+# Visualise the clusters
 clprofiles(ict_clusters, ICTSkills)
 ```
 
 
 ## Knowledge discovery
-Clusters derived include: 
+Some of the clusters derived include: 
 
 * Gender is constant across the clusters and its independent of the ICT skill. 
 * UNICEF regions; Eastern and Southern Africa (ESA),  South Asia (SA) and West and Central Africa (WCA) that have fall under wealth quantile of 1 have the highest count of youths and adults with ICT skills.
@@ -97,8 +116,8 @@ The function is
 `lambdaest(x, num.method = 1, fac.method = 1, outtype = "numeric")` 
 
 where x is the original data frame. 
-From the code, the Estimated λ is 0.0295. A small λ will emphasize that the data frame has more numeric variables and it will have a similar results as if k-means was deployed to the data
-Whereas λ means that there's a heavy influence of categorical variables in the data. In this case λ inclines more on numeric variables[^4].
+
+Estimated λ from the clusters is 0.0295. A small λ is an emphasis that the data frame has more numeric variables and it will have a similar results as if k-means was deployed to the data frame whereas a large λ means that there's a heavy influence of categorical variables in the data. In this case λ inclines more on numeric variables[^4].
 
 
 ## Perfomance comparison
@@ -111,7 +130,7 @@ A rand measure from the two clusters is 0.515913.
 An index of 0 indicates that the two clustering methods do not agree on the clustering of any pair of elements whereas an index of 1 
 indicates that the two clustering methods perfectly agree on the clustering of every pair of elements. 
 
-Our  index is an indication of 'partial agreement of the clusters.
+Our  index is an indication of partial agreement between the clusters.
 
 [^1]: https://www.itl.nist.gov/div898/handbook/eda/section3/histogr6.htm
 [^2]: https://link.springer.com/article/10.1023/A:1009769707641
